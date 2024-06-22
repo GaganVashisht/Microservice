@@ -1,7 +1,5 @@
 package com.project.user.service.services.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -10,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,6 +18,7 @@ import com.project.user.service.entites.User;
 import com.project.user.service.exceptions.ResourceAlreadyExistException;
 import com.project.user.service.exceptions.ResourceNotFoundException;
 import com.project.user.service.external.services.HotelService;
+import com.project.user.service.external.services.RatingService;
 import com.project.user.service.repositories.UserRepository;
 import com.project.user.service.services.UserService;
 
@@ -33,13 +31,16 @@ public class UserServicesImp implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    // @Autowired
+    // private RestTemplate restTemplate;
 
     @Autowired
     private HotelService hotelService;
 
-    private Logger logger=LoggerFactory.getLogger(UserService.class);
+    @Autowired
+    private RatingService ratingService;
+
+    // private Logger logger=LoggerFactory.getLogger(UserService.class);
 
     @Override
     public UserDto saveUser(UserDto userDto) {
@@ -67,9 +68,13 @@ public class UserServicesImp implements UserService {
         
         User user= userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not found: "+userId));
         
-        RatingDto[] resObj=restTemplate.getForObject("http://RATINGSERVICE/ratings/user/"+userId, RatingDto[].class);
-        List<RatingDto> resList=Arrays.asList(resObj);
-        logger.info("{}",resList);
+        // using rest template
+        // RatingDto[] resObj=restTemplate.getForObject("http://RATINGSERVICE/ratings/user/"+userId, RatingDto[].class);
+        // List<RatingDto> resList=Arrays.asList(resObj);
+        // logger.info("{}",resList);
+        
+        // using Feign client
+        List<RatingDto> resList=ratingService.getRatings(userId);
         List<RatingDto> userRatings=resList.stream().map(rating->{
             // using rest template
             // ResponseEntity<HotelDto> forEntity= restTemplate.getForEntity("http://HOTELSERVICE/hotels/"+rating.getHotelId(), HotelDto.class);
