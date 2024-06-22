@@ -19,6 +19,13 @@
         },
         {
             "type": "java",
+            "name": "ConfigServerApplication",
+            "request": "launch",
+            "mainClass": "com.project.ConfigServer.ConfigServerApplication",
+            "projectName": "ConfigServer"
+        },
+        {
+            "type": "java",
             "name": "HotelServiceApplication",
             "request": "launch",
             "mainClass": "com.project.hotel.HotelServiceApplication",
