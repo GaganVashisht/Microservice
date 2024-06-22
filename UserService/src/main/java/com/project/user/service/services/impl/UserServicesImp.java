@@ -5,11 +5,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.project.user.service.dto.HotelDto;
 import com.project.user.service.dto.RatingDto;
