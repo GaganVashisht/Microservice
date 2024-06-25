@@ -8,7 +8,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/GaganVashisht/Microservice
+          uri: https://github.com/GaganVashisht/Microservice-Config
           clone-on-start: true
 
 eureka:
