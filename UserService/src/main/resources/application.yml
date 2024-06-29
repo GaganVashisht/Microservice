@@ -49,7 +49,11 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 3
         sliding-window-size: 10
         sliding-window-type: count-based
-        
+  retry:
+    instances:
+      ratingHotelService:
+        max-attempts: 3 
+        wait-duration: 2s
 
 
 # fetching this data from config server (config.import)

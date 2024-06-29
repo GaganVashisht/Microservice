@@ -20,6 +20,7 @@ import com.project.user.service.dto.UserDto;
 import com.project.user.service.services.UserService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 
 @RestController
 @RequestMapping("/users")
@@ -37,7 +38,8 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @CircuitBreaker(name="ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")
+    // @CircuitBreaker(name="ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")
+    @Retry(name="ratingHotelService",fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<UserDto> getUser(@PathVariable String userId) {
         UserDto userDto = userService.getUser(userId);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
