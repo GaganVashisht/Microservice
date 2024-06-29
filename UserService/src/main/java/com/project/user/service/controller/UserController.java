@@ -2,6 +2,8 @@ package com.project.user.service.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.user.service.dto.UserDto;
 import com.project.user.service.services.UserService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
+    
     @Autowired
     UserService userService;
 
@@ -31,9 +37,17 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
+    @CircuitBreaker(name="ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<UserDto> getUser(@PathVariable String userId) {
         UserDto userDto = userService.getUser(userId);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
+    // fallback method for circuit breaker
+    public ResponseEntity<UserDto> ratingHotelFallback(String userId,Exception ex){
+        logger.info("Fallback is executed because service is down",ex.getMessage());
+        UserDto user=UserDto.builder().name("Dummy").email("dummyemail@gmail.com").build();
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
     @GetMapping()

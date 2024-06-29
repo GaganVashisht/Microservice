@@ -55,7 +55,21 @@ public class UserServicesImp implements UserService {
     public List<UserDto> getAllUser() {
         List<User> userList=userRepository.findAll();
         return userList.stream()
-                .map(user -> modelMapper.map(user, UserDto.class))
+                .map(user ->{ 
+                    
+                    UserDto userDto=modelMapper.map(user, UserDto.class);
+
+                    List<RatingDto> resList=ratingService.getRatings(userDto.getUserId());
+                    List<RatingDto> userRatings=resList.stream().map(rating->{                
+                        // using feign client
+                        HotelDto hotelDto=hotelService.getHotel(rating.getHotelId());
+                        
+                        rating.setHotel(hotelDto);
+                        return rating;
+                    }).collect(Collectors.toList());
+                    userDto.setRatings(userRatings);
+                    return userDto;
+                })
                 .collect(Collectors.toList());
             
     }

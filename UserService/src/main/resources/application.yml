@@ -2,13 +2,17 @@ server:
     port: 8081
 spring:
     application:
-        name: USER-SERVICE
+        name: USERSERVICE
     datasource:
         url: jdbc:postgresql://localhost:5432/microservice
         username: postgres
         password: password
         driver-class-name: org.postgresql.Driver
-
+    config:
+        import: configserver:http://localhost:8085
+    # profiles:
+    #     active: prod
+             
     jpa:
         hibernate:
             ddl-auto: update
@@ -17,11 +21,43 @@ spring:
         # properties:
             # hibernate:
                 # dialect: org.hibernate.dialect.PostgreSQLDialect
-eureka:
-  client:
-    fetch-registry: true
-    register-with-eureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-  instance:
-    preferIpAddress: true # Optional, for preferring IP address in registration
+
+management:
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+            - health
+  health:
+    circuitbreakers:
+      enabled: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      ratingHotelBreaker:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        sliding-window-type: count-based
+        
+
+
+# fetching this data from config server (config.import)
+# eureka:
+#   client:
+#     fetch-registry: true
+#     register-with-eureka: true
+#     serviceUrl:
+#       defaultZone: http://localhost:8761/eureka/
+#   instance:
+#     preferIpAddress: true # Optional, for preferring IP address in registration

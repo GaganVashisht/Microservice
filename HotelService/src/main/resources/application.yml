@@ -8,7 +8,11 @@ spring:
         username: postgres
         password: password
         driver-class-name: org.postgresql.Driver
-
+    config:
+        import: configserver:http://localhost:8085
+    # profiles:
+    #     active: prod
+    
     jpa:
         hibernate:
             ddl-auto: update
@@ -17,11 +21,11 @@ spring:
         # properties:
             # hibernate:
                 # dialect: org.hibernate.dialect.PostgreSQLDialect
-eureka:
-  client:
-    fetch-registry: true
-    register-with-eureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-  instance:
-    preferIpAddress: true # Optional, for preferring IP address in registration
+# eureka:
+#   client:
+#     fetch-registry: true
+#     register-with-eureka: true
+#     serviceUrl:
+#       defaultZone: http://localhost:8761/eureka/
+#   instance:
+#     preferIpAddress: true # Optional, for preferring IP address in registration
