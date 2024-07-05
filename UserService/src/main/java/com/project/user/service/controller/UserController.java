@@ -2,6 +2,7 @@ package com.project.user.service.controller;
 
 import java.util.List;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,8 @@ public class UserController {
 
     @GetMapping("/{userId}")
     // @CircuitBreaker(name="ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")
-    @Retry(name="ratingHotelService",fallbackMethod = "ratingHotelFallback")
+//    @Retry(name="ratingHotelService",fallbackMethod = "ratingHotelFallback")
+    @RateLimiter(name="userRateLimiter",fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<UserDto> getUser(@PathVariable String userId) {
         UserDto userDto = userService.getUser(userId);
         return new ResponseEntity<>(userDto, HttpStatus.OK);

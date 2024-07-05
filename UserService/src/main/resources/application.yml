@@ -55,7 +55,12 @@ resilience4j:
         max-attempts: 3 
         wait-duration: 2s
 
-
+  ratelimiter:
+    instances:
+      userRateLimiter:
+        limit-refresh-period: 4s
+        limit-for-period: 2
+        timeout-duration: 0s
 # fetching this data from config server (config.import)
 # eureka:
 #   client:
