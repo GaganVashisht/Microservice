@@ -60,7 +60,7 @@ resilience4j:
       userRateLimiter:
         limit-refresh-period: 4s
         limit-for-period: 2
-        timeout-duration: 0s
+        timeout-duration: 2s
 # fetching this data from config server (config.import)
 # eureka:
 #   client:

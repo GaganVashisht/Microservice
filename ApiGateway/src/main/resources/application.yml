@@ -28,3 +28,13 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
   instance:
     preferIpAddress: true # Optional, for preferring IP address in registration
+
+
+# okta conifg for api gateway
+okta:
+  oauth2:
+    issuer: https://dev-85492826.okta.com/oauth2/default
+    audience: api://default
+    client-id: 0oai9djxt0QuHtCmk5d7
+    client-secret: Xrry9fLwUpcV4eTRlZQcOUq9HyhrnmyfVhDwFA3vgyKErZRR5RwvkvGhZHtG1536
+    scopes: openid, profile, email, offline_access
